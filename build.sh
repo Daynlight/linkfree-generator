@@ -1,15 +1,18 @@
 #!/bin/sh
 
+set -e
+
 # Clean environment
 rm -rf dist
 
 # Build
 mkdir dist
-php src/index.php | minify --type html -o dist/index.html
+
+# Minify static assets
 minify -o dist/default.css src/default.css
-minify -o dist/index.css src/index.css
-minify -o dist/index.js src/index.js
 
 # Copy other assets
-cp src/api.php dist/api.php
-cp src/template.php dist/template.php
+cp src/api.php src/template.php dist/
+
+# Compile PHP and minify
+cd src/ && php index.php | minify --type html -o ../dist/index.html
